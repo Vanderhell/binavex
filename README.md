@@ -1,65 +1,55 @@
 # Binavex
 
-Binavex is a portable C99 library of deterministic bit masks, bit movement,
-Gray coding, parity, population-count and xorshift operations for embedded
-binary protocols and compact data transforms.
+Bit masks, permutations, Gray coding, parity, bitset operations and xorshift support.
 
-## Scope
+## Overview
+**Bit operations and binary coding.** Bit masks, permutations, Gray coding, parity, bitset operations and xorshift support.
 
-The package contains 36 independently buildable public functions. The `pc_`
-symbols are part of the stable public API.
-No heap, operating-system service, thread or global mutable state is required.
+## Engineering problem
+Firmware protocols and packed data paths require small, deterministic bit-level operations.
 
-## Build and test
+## Features
+- Portable C99-oriented implementation.
+- Deterministic integer or fixed-point behavior documented at function level.
+- No mandatory heap, threads or operating-system services.
+- Separate translation units for selective linking.
 
+## Architecture
+The public surface consists of 37 headers and 37 callable API entries under include/. Implementations are in src/ and tests are in tests/. State, buffers and output ownership are explicit in each header contract.
+
+## Public API
+The complete symbol-by-symbol reference is in docs/API_REFERENCE.md. It lists every public header, callable symbol, include path and available contract comment.
+
+## Integration
 ```sh
 cmake -S . -B build -DBINAVEX_BUILD_TESTS=ON
-cmake --build build --config Release
-ctest --test-dir build --output-on-failure -C Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
 ```
 
-## Contracts
+For minimal firmware, include only the required header and compile the corresponding source translation unit. No collection-wide dependency is required.
 
-Operations use fixed-width integer inputs and return deterministic values. The
-exact width, bit ordering and invalid-input behavior are specified in each
-public header under `include/binavex/bit`.
+## Configuration and dependencies
+The CMake test option is BINAVEX_BUILD_TESTS. The library has no mandatory third-party dependency. Platform-specific link requirements are documented in CMake and the affected API header.
 
-## Validation status
+## Numeric and safety contracts
+Read the individual public header before use. It defines widths, representation, valid ranges, rounding, overflow/saturation/wrap behavior, invalid-input handling and whether output is left unchanged on failure. APIs are stateless unless a caller-owned state object is explicitly present.
 
-Host extraction tests are migrated and must pass the independent CMake gate.
-ESP32-S3 validation and isolated footprint measurements are pending for this
-product; no hardware result is claimed yet.
+## Testing and validation
+26/26 enabled host tests passed.
+See docs/TESTING.md for reproducible commands, coverage boundaries and hardware status.
 
-## Architecture and integration
+## Resource status
+Embedded flash, RAM, stack and cycle measurements are reported only when measured for this product and configuration. Unmeasured values are marked PENDING; host measurements are not MCU measurements.
 
-Each bit operation is isolated in its own C99 source file for selective
-linking. Include `include/`, link `binavex`, or compile only the required
-source files. No heap, threads, OS services or mutable global state are used.
+## Hardware status
+Hardware validation is reported in docs/TESTING.md. HW NOT VERIFIED is used where no reproducible target run is available.
 
-## API and configuration
+## Limitations
+Preserved tests outside this product boundary are not silently treated as product coverage. Unsupported ranges and invalid inputs are defined by the public headers.
 
-The public API is documented by the headers under `include/binavex/bit`.
-`BINAVEX_BUILD_TESTS` controls host tests. Inputs use fixed-width unsigned
-types; bit ordering and invalid-input contracts are function-specific.
+## Versioning and license
+Version 0.1.0. Public API compatibility is maintained within the 0.x series as documented changes are introduced. Apache License 2.0, copyright Vanderhell; see LICENSE and NOTICE.
 
-## Resource and performance status
-
-Embedded flash, RAM, stack and cycle measurements are `PENDING`; no host value
-is presented as an MCU measurement. Linker garbage collection can remove
-unused translation units.
-
-## Limitations, security and release status
-
-Host coverage is 26/26 enabled tests. ESP32-S3 validation is not complete, so
-the package is not a production-candidate release. The bit transforms do not
-provide cryptographic security and must not be used as encryption.
-
-## Name and origin
-
-Binavex combines *binarium* (binary) with *nexus* (connection). It describes
-small operations that connect bit representations, masks and coded fields.
-Its technical scope is bit operations, coding and binary transforms.
-
-## License
-
-Apache License 2.0, copyright Vanderhell. See `LICENSE` and `NOTICE`.
+## Origin
+This repository is a self-contained product library. Historical provenance is maintained in the central catalog, while this repository documents the usable public API and its behavior.
