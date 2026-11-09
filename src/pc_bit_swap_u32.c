@@ -1,7 +1,7 @@
-﻿#include "pc_bit_swap_u32.h"
+#include "pc_bit_swap_u32.h"
 #include <stddef.h>
 
-bool rm_bit_swap_u32(uint32_t value, uint8_t bit_a, uint8_t bit_b,
+bool pc_bit_swap_u32(uint32_t value, uint8_t bit_a, uint8_t bit_b,
                      uint32_t *result)
 {
     uint32_t bits;

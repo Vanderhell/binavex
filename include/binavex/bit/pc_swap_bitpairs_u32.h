@@ -1,5 +1,5 @@
-#ifndef PRIMITIVECORE_PC_SWAP_BITPAIRS_U32_H
-#define PRIMITIVECORE_PC_SWAP_BITPAIRS_U32_H
+#ifndef PC_PC_SWAP_BITPAIRS_U32_H
+#define PC_PC_SWAP_BITPAIRS_U32_H
 #include <stdint.h>
 
 /* Exchange the two adjacent 2-bit fields within each nibble of a word. */

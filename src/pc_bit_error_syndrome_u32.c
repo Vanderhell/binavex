@@ -1,7 +1,7 @@
-﻿#include "pc_bit_error_syndrome_u32.h"
+#include "pc_bit_error_syndrome_u32.h"
 #include <stddef.h>
 
-bool rm_bit_error_syndrome_u32(uint32_t received_data, uint8_t received_check_bits,
+bool pc_bit_error_syndrome_u32(uint32_t received_data, uint8_t received_check_bits,
                                uint8_t *syndrome)
 {
     if (syndrome == NULL || (received_check_bits & UINT8_C(0x80)) != 0u) {

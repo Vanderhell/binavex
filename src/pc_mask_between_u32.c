@@ -1,7 +1,7 @@
-﻿#include "pc_mask_between_u32.h"
+#include "pc_mask_between_u32.h"
 #include <stddef.h>
 
-bool rm_mask_between_u32(uint8_t first_bit, uint8_t last_bit, uint32_t *mask)
+bool pc_mask_between_u32(uint8_t first_bit, uint8_t last_bit, uint32_t *mask)
 {
     uint8_t width;
     uint32_t low_mask, result;

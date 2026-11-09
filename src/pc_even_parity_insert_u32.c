@@ -1,7 +1,7 @@
-﻿#include "pc_even_parity_insert_u32.h"
+#include "pc_even_parity_insert_u32.h"
 #include <stddef.h>
 
-bool rm_even_parity_insert_u32(uint32_t payload, uint32_t *word)
+bool pc_even_parity_insert_u32(uint32_t payload, uint32_t *word)
 {
     if (word == NULL || (payload & UINT32_C(0x80000000)) != 0u) {
         return false;

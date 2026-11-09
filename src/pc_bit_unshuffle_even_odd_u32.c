@@ -1,4 +1,4 @@
-﻿#include "pc_bit_unshuffle_even_odd_u32.h"
+#include "pc_bit_unshuffle_even_odd_u32.h"
 
 static uint32_t spread_even_bits(uint32_t x)
 {
@@ -10,7 +10,7 @@ static uint32_t spread_even_bits(uint32_t x)
     return x;
 }
 
-uint32_t rm_bit_unshuffle_even_odd_u32(uint32_t value)
+uint32_t pc_bit_unshuffle_even_odd_u32(uint32_t value)
 {
     uint32_t even = spread_even_bits(value);
     uint32_t odd = spread_even_bits(value >> 16);

@@ -6,8 +6,8 @@ binary protocols and compact data transforms.
 
 ## Scope
 
-This first extraction contains 36 independently buildable public functions
-from the PrimitiveCore bit family. The original `pc_` symbols are preserved.
+The package contains 36 independently buildable public functions. The `pc_`
+symbols are part of the stable public API.
 No heap, operating-system service, thread or global mutable state is required.
 
 ## Build and test
@@ -30,12 +30,35 @@ Host extraction tests are migrated and must pass the independent CMake gate.
 ESP32-S3 validation and isolated footprint measurements are pending for this
 product; no hardware result is claimed yet.
 
+## Architecture and integration
+
+Each bit operation is isolated in its own C99 source file for selective
+linking. Include `include/`, link `binavex`, or compile only the required
+source files. No heap, threads, OS services or mutable global state are used.
+
+## API and configuration
+
+The public API is documented by the headers under `include/binavex/bit`.
+`BINAVEX_BUILD_TESTS` controls host tests. Inputs use fixed-width unsigned
+types; bit ordering and invalid-input contracts are function-specific.
+
+## Resource and performance status
+
+Embedded flash, RAM, stack and cycle measurements are `PENDING`; no host value
+is presented as an MCU measurement. Linker garbage collection can remove
+unused translation units.
+
+## Limitations, security and release status
+
+Host coverage is 26/26 enabled tests. ESP32-S3 validation is not complete, so
+the package is not a production-candidate release. The bit transforms do not
+provide cryptographic security and must not be used as encryption.
+
 ## Name and origin
 
 Binavex combines *binarium* (binary) with *nexus* (connection). It describes
 small operations that connect bit representations, masks and coded fields.
-The product originates from PrimitiveCore's
-`bit/bit_operations_and_coding` family.
+Its technical scope is bit operations, coding and binary transforms.
 
 ## License
 

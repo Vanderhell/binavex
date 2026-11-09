@@ -1,5 +1,5 @@
-#ifndef PRIMITIVECORE_PC_CTZ_U64_H
-#define PRIMITIVECORE_PC_CTZ_U64_H
+#ifndef PC_PC_CTZ_U64_H
+#define PC_PC_CTZ_U64_H
 
 #include <stdint.h>
 

@@ -1,6 +1,6 @@
-﻿#include "pc_mask_is_contiguous_u32.h"
+#include "pc_mask_is_contiguous_u32.h"
 
-bool rm_mask_is_contiguous_u32(uint32_t mask)
+bool pc_mask_is_contiguous_u32(uint32_t mask)
 {
     uint32_t lowest;
     if (mask == 0u) return false;

@@ -1,4 +1,4 @@
-﻿#include "pc_bit_interleave4_u32.h"
+#include "pc_bit_interleave4_u32.h"
 
 static uint32_t spread4(uint32_t x)
 {
@@ -9,7 +9,7 @@ static uint32_t spread4(uint32_t x)
     return x;
 }
 
-uint32_t rm_bit_interleave4_u32(uint32_t lanes)
+uint32_t pc_bit_interleave4_u32(uint32_t lanes)
 {
     return spread4(lanes) |
            (spread4(lanes >> 8) << 1) |

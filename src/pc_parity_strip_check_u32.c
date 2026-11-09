@@ -1,7 +1,7 @@
-﻿#include "pc_parity_strip_check_u32.h"
+#include "pc_parity_strip_check_u32.h"
 #include <stddef.h>
 
-bool rm_parity_strip_check_u32(uint32_t word, uint32_t *payload)
+bool pc_parity_strip_check_u32(uint32_t word, uint32_t *payload)
 {
     if (payload == NULL) {
         return false;

@@ -1,7 +1,7 @@
-﻿#include "pc_secded_parity_u32.h"
+#include "pc_secded_parity_u32.h"
 #include <stddef.h>
 
-bool rm_secded_parity_u32(uint32_t data, uint8_t *check_bits)
+bool pc_secded_parity_u32(uint32_t data, uint8_t *check_bits)
 {
     if (check_bits == NULL) {
         return false;

@@ -1,6 +1,6 @@
-﻿#include "pc_bit_byte_reverse_u32.h"
+#include "pc_bit_byte_reverse_u32.h"
 
-uint32_t rm_bit_byte_reverse_u32(uint32_t value)
+uint32_t pc_bit_byte_reverse_u32(uint32_t value)
 {
     return ((value & UINT32_C(0x01010101)) << 7) |
            ((value & UINT32_C(0x02020202)) << 5) |

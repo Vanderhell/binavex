@@ -1,6 +1,6 @@
-﻿#include "pc_bit_gather_u32.h"
+#include "pc_bit_gather_u32.h"
 
-uint32_t rm_bit_gather_u32(uint32_t value, uint32_t mask)
+uint32_t pc_bit_gather_u32(uint32_t value, uint32_t mask)
 {
     uint32_t gathered = 0u;
     uint32_t output_bit = 1u;

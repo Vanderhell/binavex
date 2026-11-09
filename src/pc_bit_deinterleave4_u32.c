@@ -1,4 +1,4 @@
-﻿#include "pc_bit_deinterleave4_u32.h"
+#include "pc_bit_deinterleave4_u32.h"
 
 static uint32_t gather4(uint32_t x)
 {
@@ -9,7 +9,7 @@ static uint32_t gather4(uint32_t x)
     return x;
 }
 
-uint32_t rm_bit_deinterleave4_u32(uint32_t packed)
+uint32_t pc_bit_deinterleave4_u32(uint32_t packed)
 {
     return gather4(packed) |
            (gather4(packed >> 1) << 8) |

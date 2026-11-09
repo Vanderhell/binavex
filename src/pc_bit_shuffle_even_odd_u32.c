@@ -1,4 +1,4 @@
-﻿#include "pc_bit_shuffle_even_odd_u32.h"
+#include "pc_bit_shuffle_even_odd_u32.h"
 
 static uint32_t compress_even_bits(uint32_t x)
 {
@@ -10,7 +10,7 @@ static uint32_t compress_even_bits(uint32_t x)
     return x;
 }
 
-uint32_t rm_bit_shuffle_even_odd_u32(uint32_t value)
+uint32_t pc_bit_shuffle_even_odd_u32(uint32_t value)
 {
     return compress_even_bits(value) | (compress_even_bits(value >> 1) << 16);
 }

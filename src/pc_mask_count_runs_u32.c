@@ -1,6 +1,6 @@
-﻿#include "pc_mask_count_runs_u32.h"
+#include "pc_mask_count_runs_u32.h"
 
-uint8_t rm_mask_count_runs_u32(uint32_t mask)
+uint8_t pc_mask_count_runs_u32(uint32_t mask)
 {
     uint32_t x = mask & ~(mask << 1);
     x = x - ((x >> 1) & UINT32_C(0x55555555));
