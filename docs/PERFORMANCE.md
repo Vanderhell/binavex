@@ -1,6 +1,8 @@
 ﻿# Performance and memory
 
-## Current ESP32-S3 measurements
+## Previously recorded ESP32-S3 measurements
+
+These measurements were recorded during the earlier hardware validation. The production and audit-test sources have not changed since that run. The 2026-11-11 follow-up identified the same board but did not capture serial output, so these are historical results and were not freshly remeasured.
 
 Measured on the designated COM37 ESP32-S3, revision 0.2, USB Serial/JTAG, 240 MHz CPU, 40 MHz crystal. Firmware used ESP-IDF 5.5.1, Xtensa GCC 14.2.0, production source compiled as C99, and `-O2`. Each API timing is a paired actual/no-op batch difference, median across 21 samples of 1,000 calls each. A volatile function-pointer table and volatile result sink prevent the compiler from removing calls. The median no-op batch was 15,002 cycles for 1,000 calls. Values below are cycles/call; ranges are observed min..max across the 21 paired samples.
 
@@ -45,6 +47,8 @@ Measured on the designated COM37 ESP32-S3, revision 0.2, USB Serial/JTAG, 240 MH
 | `pc_xorshift32` | state `12345678` | 263.06 | 260.13..283.80 |
 
 These values characterize this board, compiler, optimization, link and harness only. In particular, gather/scatter are mask-population dependent, and other functions may vary with input.
+
+The available report records representative-input results. Boundary-input cycle measurements are **NOT MEASURED** in the retained evidence.
 
 ## Isolated footprint and stack observation
 

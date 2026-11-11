@@ -23,16 +23,32 @@ All configurations use C99 and strict warning settings (`-Wall -Wextra -Wpedanti
 | MSVC 19.42.34444 | Debug | PASS, 27/27 CTest |
 | MSVC 19.42.34444 | Release | PASS, 27/27 CTest |
 | Native Windows Clang driver | Debug/Release | NOT RUN: local standalone driver cannot link because MSVC runtime libraries are not on its search path; ClangCL above uses the installed Visual Studio toolchain |
-| Local GCC ASan | — | NOT RUN: MinGW GCC cannot find `-lasan` |
-| Local GCC UBSan | — | NOT RUN: MinGW GCC cannot find `-lubsan` |
+| Local GCC ASan | â€” | NOT RUN: MinGW GCC cannot find `-lasan` |
+| Local GCC UBSan | â€” | NOT RUN: MinGW GCC cannot find `-lubsan` |
 
 GitHub Actions run `43026354650` on commit `eece181e4f72e9c6e6f2f200f0abf6837282b24a` completed successfully: 8/8 jobs passed (GCC Debug/Release, Clang Debug/Release, MSVC Debug/Release, ASan, UBSan). [Workflow run](https://github.com/Vanderhell/binavex/actions/runs/43026354650). CI executes native Linux GCC/Clang, MSVC Debug/Release, ASan and UBSan.
 
+### Revalidation of current source
+
+On 2026-11-11, the current source and tests (HEAD `3439e6f`; its difference from the CI-tested commit is documentation only) were rebuilt in clean temporary build directories with strict warnings:
+
+| Toolchain | Configuration | Result |
+|---|---|---|
+| GCC 16.1.0 (WinLibs UCRT) | Debug | PASS, 27/27 CTest |
+| GCC 16.1.0 (WinLibs UCRT) | Release | PASS, 27/27 CTest |
+| MSVC 19.42.34444 | Debug | PASS, 27/27 CTest |
+| MSVC 19.42.34444 | Release | PASS, 27/27 CTest |
+| ClangCL 22.1.8 | Debug/Release | NOT RUN: this host lacks the Windows SDK and MSVC runtime libraries required by the linker |
+
+The existing remote matrix supplies native Linux Clang and both sanitizer runtimes. It covered identical production and test sources; the final documentation-only commit is queued for a new final-commit CI run.
+
 ## ESP32-S3 hardware
 
-**PASS: 37/37 public APIs** on the designated ESP32-S3 at COM37, USB Serial/JTAG, MAC `3c:0f:02:d9:77:30`, revision 0.2. The validation firmware compiled the production `src/*.c` files as C99 using ESP-IDF 5.5.1, Xtensa GCC 14.2.0, `-O2`, and 240 MHz CPU clock. It ran the deterministic differential test suite and printed `BINAVEX_ALL37_PASS|passed=37/37|first_failed_api=0`.
+**Historical PASS: 37/37 public APIs** on the designated ESP32-S3 at COM37, USB Serial/JTAG, MAC `3c:0f:02:d9:77:30`, revision 0.2. The validation firmware compiled the production `src/*.c` files as C99 using ESP-IDF 5.5.1, Xtensa GCC 14.2.0, `-O2`, and 240 MHz CPU clock. It ran the deterministic differential test suite and printed `BINAVEX_ALL37_PASS|passed=37/37|first_failed_api=0`.
 
-Only app0 (`0x10000..0x3FFFF`) was written; the image was read-back hash verified. No bootloader, partition table, OTA metadata, NVS, app1, SPIFFS or coredump partition was written. The previous app0 image was overwritten and was not restored. No backup was made. This board now contains the Binavex validation firmware.
+On 2026-11-11, esptool identified the same device and read its partition table and app0 without writing. The partition layout matched the recorded layout. The app0 readback contains `ANGULORA_ALL9_PASS`, so it currently holds another project's validation image. A serial capture returned no bytes. No flash or NVS writes were made; Binavex hardware tests were not rerun because doing so would replace that image. The historical Binavex result is from the same production and audit-test sources, which have not changed since then.
+
+In that earlier run, only app0 was written (partition offset `0x10000`, size `0x140000`); the image was read-back hash verified. No bootloader, partition table, OTA metadata, NVS, app1, SPIFFS or coredump partition was written. The previous app0 image was overwritten and was not restored, and no backup was made. This follow-up made no writes. The currently installed app image was not confirmed by the silent serial capture.
 
 ## Reproduce host tests
 
