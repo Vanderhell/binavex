@@ -1,4 +1,4 @@
-ï»¿# Testing and validation
+# Testing and validation
 
 ## Public API and direct coverage
 
@@ -23,10 +23,10 @@ All configurations use C99 and strict warning settings (`-Wall -Wextra -Wpedanti
 | MSVC 19.42.34444 | Debug | PASS, 27/27 CTest |
 | MSVC 19.42.34444 | Release | PASS, 27/27 CTest |
 | Native Windows Clang driver | Debug/Release | NOT RUN: local standalone driver cannot link because MSVC runtime libraries are not on its search path; ClangCL above uses the installed Visual Studio toolchain |
-| Local GCC ASan | â€” | NOT RUN: MinGW GCC cannot find `-lasan` |
-| Local GCC UBSan | â€” | NOT RUN: MinGW GCC cannot find `-lubsan` |
+| Local GCC ASan | — | NOT RUN: MinGW GCC cannot find `-lasan` |
+| Local GCC UBSan | — | NOT RUN: MinGW GCC cannot find `-lubsan` |
 
-The final GitHub Actions run is recorded below after push. CI executes native Linux GCC/Clang, MSVC Debug/Release, ASan and UBSan.
+GitHub Actions run `43026354650` on commit `eece181e4f72e9c6e6f2f200f0abf6837282b24a` completed successfully: 8/8 jobs passed (GCC Debug/Release, Clang Debug/Release, MSVC Debug/Release, ASan, UBSan). [Workflow run](https://github.com/Vanderhell/binavex/actions/runs/43026354650). CI executes native Linux GCC/Clang, MSVC Debug/Release, ASan and UBSan.
 
 ## ESP32-S3 hardware
 
