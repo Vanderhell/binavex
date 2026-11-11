@@ -1,3 +1,7 @@
+#if defined(ESP_PLATFORM)
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#endif
 #include "pc_bit_byte_reverse_u32.h"
 #include "pc_bit_deinterleave4_u32.h"
 #include "pc_bit_error_syndrome_u32.h"
@@ -39,9 +43,48 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
+
+static unsigned int audit_first_failed_api_index;
+
+static unsigned int audit_api_index_from_expression(const char *expression)
+{
+    static const char * const api_names[] = {
+        "pc_bit_byte_reverse_u32", "pc_bit_deinterleave4_u32",
+        "pc_bit_error_syndrome_u32", "pc_bit_extract_u64", "pc_bit_gather_u32",
+        "pc_bit_interleave4_u32", "pc_bit_nibble_reverse_u32", "pc_bit_pair_reverse_u32",
+        "pc_bit_reverse_u64", "pc_bit_scatter_u32", "pc_bit_shuffle_even_odd_u32",
+        "pc_bit_swap_u32", "pc_bit_unshuffle_even_odd_u32", "pc_bitset_count_ones_u32",
+        "pc_bitset_rotate_left_u32", "pc_clz_u64", "pc_ctz_u64",
+        "pc_deinterleave_nibbles_u32", "pc_even_parity_insert_u32", "pc_gray_decode_u64",
+        "pc_gray_encode_u64", "pc_interleave_bytes_u32", "pc_interleave_nibbles_u32",
+        "pc_mask_between_u32", "pc_mask_count_runs_u32", "pc_mask_is_contiguous_u32",
+        "pc_mask_low_u64", "pc_mask_lowest_n_u32", "pc_parity_strip_check_u32",
+        "pc_parity_u64", "pc_popcount_u64", "pc_rotate_left_u64", "pc_secded_parity_u32",
+        "pc_swap_bitpairs_u32", "pc_swap_bytes16_u32", "pc_swap_nibbles_u32", "pc_xorshift32"
+    };
+    const char *first_match = NULL;
+    unsigned int first_index = 0u;
+    unsigned int i;
+    for (i = 0u; i < (unsigned int)(sizeof(api_names) / sizeof(api_names[0])); ++i) {
+        const char *match = strstr(expression, api_names[i]);
+        if (match != NULL && (first_match == NULL || match < first_match)) {
+            first_match = match;
+            first_index = i + 1u;
+        }
+    }
+    return first_index;
+}
+
+unsigned int binavex_audit_first_failed_api_index(void)
+{
+    return audit_first_failed_api_index;
+}
 
 #define CHECK(condition) do { if (!(condition)) { \
-    fprintf(stderr, "audit check failed at line %d: %s\n", __LINE__, #condition); \
+    audit_first_failed_api_index = audit_api_index_from_expression(#condition); \
+    fprintf(stderr, "audit check failed at line %d (first API index %u): %s\n", \
+            __LINE__, audit_first_failed_api_index, #condition); \
     return 1; \
 } } while (0)
 
@@ -473,6 +516,9 @@ int main(void)
         CHECK(pc_parity_strip_check_u32(got32,&got32));
         CHECK(got32==(x&UINT32_C(0x7FFFFFFF)));
         { uint8_t checks=0u,syndrome=UINT8_C(0xA5); CHECK(pc_secded_parity_u32(x,&checks)); CHECK(checks==ref_secded_checks(x)); CHECK(pc_bit_error_syndrome_u32(x,checks,&syndrome)); CHECK(syndrome==ref_syndrome(x,checks) && syndrome==0u); }
+#if defined(ESP_PLATFORM)
+        if ((i & 255u) == 255u) vTaskDelay(1u);
+#endif
     }
 
     /* Invalid arguments preserve all documented output values. */

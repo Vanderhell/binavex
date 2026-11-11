@@ -44,11 +44,9 @@ The existing remote matrix supplies native Linux Clang and both sanitizer runtim
 
 ## ESP32-S3 hardware
 
-**Historical PASS: 37/37 public APIs** on the designated ESP32-S3 at COM37, USB Serial/JTAG, MAC `3c:0f:02:d9:77:30`, revision 0.2. The validation firmware compiled the production `src/*.c` files as C99 using ESP-IDF 5.5.1, Xtensa GCC 14.2.0, `-O2`, and 240 MHz CPU clock. It ran the deterministic differential test suite and printed `BINAVEX_ALL37_PASS|passed=37/37|first_failed_api=0`.
+**Current hardware PASS: 37/37 public APIs.** On 2026-11-11, the designated ESP32-S3 on COM37 (USB Serial/JTAG, MAC `3c:0f:02:d9:77:30`, revision 0.2) ran the validation firmware built with ESP-IDF 5.5.1, Xtensa GCC 14.2.0, C99 production units, `-O3`, and confirmed 240 MHz CPU. The independent differential suite completed and printed `BINAVEX_ALL37_PASS|passed=37/37|first_failed_api=0`; no watchdog warning occurred during the final run. The suite exercises direct API calls, reference comparisons, boundaries and deterministic generated data. See `docs/PERFORMANCE.md` for per-API representative/boundary cycle medians and memory attribution.
 
-On 2026-11-11, esptool identified the same device and read its partition table and app0 without writing. The partition layout matched the recorded layout. The app0 readback contains `ANGULORA_ALL9_PASS`, so it currently holds another project's validation image. A serial capture returned no bytes. No flash or NVS writes were made; Binavex hardware tests were not rerun because doing so would replace that image. The historical Binavex result is from the same production and audit-test sources, which have not changed since then.
-
-In that earlier run, only app0 was written (partition offset `0x10000`, size `0x140000`); the image was read-back hash verified. No bootloader, partition table, OTA metadata, NVS, app1, SPIFFS or coredump partition was written. The previous app0 image was overwritten and was not restored, and no backup was made. This follow-up made no writes. The currently installed app image was not confirmed by the silent serial capture.
+The user designated this board for testing and authorized replacing its existing test firmware without a backup. Only app0 at offset `0x10000` was written, and esptool verified its digest after writing. NVS, bootloader, partition table, OTA metadata, app1, SPIFFS and coredump were not written. The binary was 211,904 bytes and fits the app0 partition. Physical flash is 16 MB; the image header still reports 4 MB, which ESP-IDF logged as a size mismatch. The test completed despite this warning. No hardware algorithm defect was found.
 
 ## Reproduce host tests
 

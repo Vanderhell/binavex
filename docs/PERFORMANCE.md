@@ -1,6 +1,60 @@
 ﻿# Performance and memory
 
-## Previously recorded ESP32-S3 measurements
+## Current ESP32-S3 validation (2026-11-11)
+
+Fresh validation ran on the designated COM37 ESP32-S3, revision 0.2, MAC `3c:0f:02:d9:77:30`, 40 MHz crystal, with the CPU confirmed at 240 MHz. ESP-IDF 5.5.1 and Xtensa GCC 14.2.0 built the production sources as C99 with `-O3`. The uploaded test app was 211,904 bytes (`0x33BC0`); esptool verified the image hash at app0 offset `0x10000`. Firmware printed `BINAVEX_ALL37_PASS|passed=37/37|first_failed_api=0` and completed all 37 direct API checks. No watchdog warning appeared in this final run.
+
+Each API was measured twice, on one representative input and one boundary input. For each case the firmware took 21 samples of 1,000 calls. It subtracted a paired no-op function-pointer batch, then reported median and observed minimum/maximum cycles per call. The no-op batch median was 34,002 cycles per 1,000 calls. A volatile function pointer and result sink prevent call elimination. The measured timing includes call and harness costs not canceled by the no-op pair; it is an estimate for this exact build and board, not a portable WCET guarantee. `min..max` below combines the observed ranges from both input classes.
+
+| API | Representative median | Boundary median | Observed min..max |
+|---|---:|---:|---:|
+| `pc_bit_byte_reverse_u32` | 45.00 | 45.00 | 43.55..46.23 |
+| `pc_bit_deinterleave4_u32` | 59.00 | 59.00 | 57.58..60.55 |
+| `pc_bit_error_syndrome_u32` | 655.03 | 655.01 | 655.00..656.49 |
+| `pc_bit_extract_u64` | 71.00 | 61.00 | 59.55..72.68 |
+| `pc_bit_gather_u32` | 190.00 | 366.00 | 188.58..367.49 |
+| `pc_bit_interleave4_u32` | 58.00 | 58.00 | 58.00..59.49 |
+| `pc_bit_nibble_reverse_u32` | 25.00 | 25.00 | 23.58..25.43 |
+| `pc_bit_pair_reverse_u32` | 14.00 | 14.00 | 12.59..15.42 |
+| `pc_bit_reverse_u64` | 63.00 | 63.00 | 63.00..64.49 |
+| `pc_bit_scatter_u32` | 206.00 | 398.00 | 206.00..399.49 |
+| `pc_bit_shuffle_even_odd_u32` | 42.00 | 42.00 | 40.59..43.49 |
+| `pc_bit_swap_u32` | 43.00 | 39.00 | 38.90..44.49 |
+| `pc_bit_unshuffle_even_odd_u32` | 43.00 | 43.00 | 43.00..44.42 |
+| `pc_bitset_count_ones_u32` | 27.00 | 27.00 | 25.59..27.43 |
+| `pc_bitset_rotate_left_u32` | 11.00 | 11.00 | 9.87..12.45 |
+| `pc_clz_u64` | 34.00 | 12.00 | 10.55..35.49 |
+| `pc_ctz_u64` | 37.00 | 12.00 | 11.90..38.30 |
+| `pc_deinterleave_nibbles_u32` | 33.00 | 33.00 | 33.00..34.45 |
+| `pc_even_parity_insert_u32` | 30.00 | 30.00 | 28.59..31.48 |
+| `pc_gray_decode_u64` | 34.00 | 34.00 | 33.90..35.49 |
+| `pc_gray_encode_u64` | 13.00 | 13.00 | 12.90..14.45 |
+| `pc_interleave_bytes_u32` | 17.00 | 17.00 | 15.55..18.49 |
+| `pc_interleave_nibbles_u32` | 33.00 | 33.00 | 31.58..33.79 |
+| `pc_mask_between_u32` | 37.00 | 37.00 | 35.55..37.57 |
+| `pc_mask_count_runs_u32` | 30.00 | 30.00 | 29.91..31.92 |
+| `pc_mask_is_contiguous_u32` | 15.00 | 15.00 | 13.55..16.41 |
+| `pc_mask_low_u64` | 38.00 | 28.00 | 28.00..39.45 |
+| `pc_mask_lowest_n_u32` | 26.00 | 26.00 | 25.72..27.49 |
+| `pc_parity_strip_check_u32` | 32.00 | 32.00 | 30.59..33.45 |
+| `pc_parity_u64` | 31.00 | 31.00 | 31.00..32.49 |
+| `pc_popcount_u64` | 48.00 | 48.00 | 47.91..49.56 |
+| `pc_rotate_left_u64` | 46.00 | 46.00 | 45.90..47.42 |
+| `pc_secded_parity_u32` | 381.00 | 381.00 | 379.60..382.49 |
+| `pc_swap_bitpairs_u32` | 15.00 | 15.00 | 15.00..16.42 |
+| `pc_swap_bytes16_u32` | 13.00 | 13.00 | 13.00..14.41 |
+| `pc_swap_nibbles_u32` | 15.00 | 15.00 | 13.59..15.44 |
+| `pc_xorshift32` | 12.00 | 12.00 | 10.55..12.22 |
+
+The representative input uses `0xA5C369F0` (32-bit values), `0xD3A57C9E102468BF` (64-bit values), mask `0x5555AAAA`, count 13, range 5..27, and width 37, with API-specific valid payloads. Boundary inputs use all-one values/masks, count 31, range 0..31, width 64, and zero where the API's boundary case calls for it. Special cases: `pc_bit_error_syndrome_u32` uses `0xA55A1234` plus its generated check bits; 64-bit CLZ/CTZ use zero at boundary; `pc_even_parity_insert_u32` uses payload `0x25C369F0` and `0x7FFFFFFF`; `pc_parity_strip_check_u32` uses an encoded valid word and zero.
+
+## Isolated footprint from current link
+
+The ESP-IDF linker map attributes **2,753 bytes `.flash.text`** and **0 bytes static RAM** (`.dram0.data` plus `.dram0.bss`) to the 37 production translation units when all public APIs are linked. This is object-attribution in this validation link and includes any code retained for those functions; another consumer link may differ. The audit suite object contributes 11,460 flash bytes and 12 static RAM bytes; `main.c` contributes 2,331 flash bytes and 40 static RAM bytes. The whole image is 211,904 bytes and includes ESP-IDF, startup/runtime, validation suite and benchmark harness, so it is not library size. The main task uses an 8,192-byte configured stack; one post-run high-water reading reported 6,508 bytes free (1,684 bytes observed use). That is one observed run, not a maximum stack bound.
+
+The physical flash is 16 MB, while this ESP-IDF image header still reports 4 MB and boot logged that mismatch. It did not affect the run or app0 write, but the validation firmware does not advertise the full physical flash capacity in its image header.
+
+## Historical ESP32-S3 measurements
 
 These measurements were recorded during the earlier hardware validation. The production and audit-test sources have not changed since that run. The 2026-11-11 follow-up identified the same board but did not capture serial output, so these are historical results and were not freshly remeasured.
 
