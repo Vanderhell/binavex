@@ -11,20 +11,20 @@ Firmware protocols and packed data paths require small, deterministic bit-level 
 
 ## What is included
 
-- Portable C99-oriented implementation.
-- Deterministic integer or fixed-point behavior documented at function level.
+- Portable C99 implementation.
+- Deterministic integer behavior documented in the public headers.
 - No mandatory heap, threads or operating-system services.
 - Separate translation units for selective linking.
 
 ## Quick start
 
 ```sh
-cmake -S . -B build -DBINAVEX_BUILD_TESTS=ON
+cmake -S . -B build -DBINAVEX_BUILD_TESTS=ON -DBINAVEX_STRICT_WARNINGS=ON
 cmake --build build --parallel
 ctest --test-dir build --output-on-failure
 ```
 
-For a minimal integration, include only the required public header and compile the matching source unit. The library does not require the rest of PrimitiveCore.
+For a minimal integration, include the required public header and compile its matching source unit, or link the static CMake target. Binavex does not require the rest of PrimitiveCore.
 
 ## Documentation
 
@@ -34,20 +34,13 @@ For a minimal integration, include only the required public header and compile t
 | Check every function and contract | [API reference](docs/API_REFERENCE.md) |
 | Reproduce tests and see validation limits | [Testing report](docs/TESTING.md) |
 | Review design and dependencies | [Architecture](docs/ARCHITECTURE.md) |
-| See measured or pending performance data | [Performance](docs/PERFORMANCE.md) |
+| See measured embedded performance | [Performance](docs/PERFORMANCE.md) |
 
-## At a glance
+## Public API and validation
 
-The public surface consists of 37 headers and 37 callable API entries under include/. Implementations are in src/ and tests are in tests/. State, buffers and output ownership are explicit in each header contract.
+The public surface contains 37 headers and 37 callable API entries under `include/`. All 37 APIs have direct enabled checks in the deterministic audit test, in addition to 26 original unit test programs. The host matrix, sanitizer evidence and hardware limits are recorded in `docs/TESTING.md`.
 
-The CMake test option is BINAVEX_BUILD_TESTS. The library has no mandatory third-party dependency. Platform-specific link requirements are documented in CMake and the affected API header.
-
-## Validation status
-
-26/26 enabled host tests passed.
-See docs/TESTING.md for reproducible commands, coverage boundaries and hardware status.
-
-Detailed overflow, rounding, invalid-input, memory-ownership and state rules are defined by the public headers and API reference. Do not infer them from the product name alone.
+The current COM37 ESP32-S3 validation passed all 37 APIs. Cycle measurements, link-map library footprint and stack watermark observations are recorded in `docs/PERFORMANCE.md`. Xorshift is not cryptographically secure.
 
 ## License
 
