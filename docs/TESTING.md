@@ -40,7 +40,7 @@ On 2026-11-11, the current source and tests (HEAD `3439e6f`; its difference from
 | MSVC 19.42.34444 | Release | PASS, 27/27 CTest |
 | ClangCL 22.1.8 | Debug/Release | NOT RUN: this host lacks the Windows SDK and MSVC runtime libraries required by the linker |
 
-The existing remote matrix supplies native Linux Clang and both sanitizer runtimes. It covered identical production and test sources; the final documentation-only commit is queued for a new final-commit CI run.
+The existing remote matrix supplies native Linux Clang and both sanitizer runtimes. Workflow run `43044147090` on commit `a11f6be2d06ba5f4fb7e2d2ed31d24addaf48495` completed successfully: 8/8 jobs passed (GCC Debug/Release, Clang Debug/Release, MSVC Debug/Release, ASan, UBSan). [Final workflow run](https://github.com/Vanderhell/binavex/actions/runs/43044147090).
 
 ## ESP32-S3 hardware
 
