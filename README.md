@@ -1,4 +1,4 @@
-﻿# Binavex
+# Binavex
 ![CI](https://github.com/Vanderhell/binavex/actions/workflows/ci.yml/badge.svg) ![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg) ![Language](https://img.shields.io/badge/language-C99-informational.svg)
 
 ![Binavex banner](docs/banner.svg)
@@ -24,7 +24,7 @@ cmake --build build --parallel
 ctest --test-dir build --output-on-failure
 ```
 
-For a minimal integration, include the required public header and compile its matching source unit, or link the static CMake target. Binavex does not require the rest of PrimitiveCore.
+For a minimal integration, include the required public header and compile its matching source unit, or link the static CMake target.
 
 ## Documentation
 
@@ -45,7 +45,3 @@ The current COM37 ESP32-S3 validation passed all 37 APIs. Cycle measurements, li
 ## License
 
 Apache License 2.0, copyright Vanderhell. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
-
-## Origin
-
-A standalone embedded-C library extracted from the PrimitiveCore product catalog. It is independently buildable and linkable.
