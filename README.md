@@ -40,7 +40,7 @@ For a minimal integration, include the required public header and compile its ma
 
 The public surface contains 37 headers and 37 callable API entries under `include/`. All 37 APIs have direct enabled checks in the deterministic audit test, in addition to 26 original unit test programs. The host matrix, sanitizer evidence and hardware limits are recorded in `docs/TESTING.md`.
 
-The current COM37 ESP32-S3 validation passed all 37 APIs. Cycle measurements, link-map library footprint and stack watermark observations are recorded in `docs/PERFORMANCE.md`. Xorshift is not cryptographically secure.
+The ESP32-S3 validation passed all 37 APIs. Cycle measurements, link-map library footprint and stack watermark observations are recorded in `docs/PERFORMANCE.md`. Xorshift is not cryptographically secure.
 
 ## License
 
