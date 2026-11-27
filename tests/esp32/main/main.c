@@ -1,40 +1,40 @@
-#include "pc_bit_byte_reverse_u32.h"
-#include "pc_bit_deinterleave4_u32.h"
-#include "pc_bit_error_syndrome_u32.h"
-#include "pc_bit_extract_u64.h"
-#include "pc_bit_gather_u32.h"
-#include "pc_bit_interleave4_u32.h"
-#include "pc_bit_nibble_reverse_u32.h"
-#include "pc_bit_pair_reverse_u32.h"
-#include "pc_bit_reverse_u64.h"
-#include "pc_bit_scatter_u32.h"
-#include "pc_bit_shuffle_even_odd_u32.h"
-#include "pc_bit_swap_u32.h"
-#include "pc_bit_unshuffle_even_odd_u32.h"
-#include "pc_bitset_count_ones_u32.h"
-#include "pc_bitset_rotate_left_u32.h"
-#include "pc_clz_u64.h"
-#include "pc_ctz_u64.h"
-#include "pc_deinterleave_nibbles_u32.h"
-#include "pc_even_parity_insert_u32.h"
-#include "pc_gray_decode_u64.h"
-#include "pc_gray_encode_u64.h"
-#include "pc_interleave_bytes_u32.h"
-#include "pc_interleave_nibbles_u32.h"
-#include "pc_mask_between_u32.h"
-#include "pc_mask_count_runs_u32.h"
-#include "pc_mask_is_contiguous_u32.h"
-#include "pc_mask_low_u64.h"
-#include "pc_mask_lowest_n_u32.h"
-#include "pc_parity_strip_check_u32.h"
-#include "pc_parity_u64.h"
-#include "pc_popcount_u64.h"
-#include "pc_rotate_left_u64.h"
-#include "pc_secded_parity_u32.h"
-#include "pc_swap_bitpairs_u32.h"
-#include "pc_swap_bytes16_u32.h"
-#include "pc_swap_nibbles_u32.h"
-#include "pc_xorshift32.h"
+#include <binavex/bit/bit_byte_reverse_u32.h>
+#include <binavex/bit/bit_deinterleave4_u32.h>
+#include <binavex/bit/bit_error_syndrome_u32.h>
+#include <binavex/bit/bit_extract_u64.h>
+#include <binavex/bit/bit_gather_u32.h>
+#include <binavex/bit/bit_interleave4_u32.h>
+#include <binavex/bit/bit_nibble_reverse_u32.h>
+#include <binavex/bit/bit_pair_reverse_u32.h>
+#include <binavex/bit/bit_reverse_u64.h>
+#include <binavex/bit/bit_scatter_u32.h>
+#include <binavex/bit/bit_shuffle_even_odd_u32.h>
+#include <binavex/bit/bit_swap_u32.h>
+#include <binavex/bit/bit_unshuffle_even_odd_u32.h>
+#include <binavex/bit/bitset_count_ones_u32.h>
+#include <binavex/bit/bitset_rotate_left_u32.h>
+#include <binavex/bit/clz_u64.h>
+#include <binavex/bit/ctz_u64.h>
+#include <binavex/bit/deinterleave_nibbles_u32.h>
+#include <binavex/bit/even_parity_insert_u32.h>
+#include <binavex/bit/gray_decode_u64.h>
+#include <binavex/bit/gray_encode_u64.h>
+#include <binavex/bit/interleave_bytes_u32.h>
+#include <binavex/bit/interleave_nibbles_u32.h>
+#include <binavex/bit/mask_between_u32.h>
+#include <binavex/bit/mask_count_runs_u32.h>
+#include <binavex/bit/mask_is_contiguous_u32.h>
+#include <binavex/bit/mask_low_u64.h>
+#include <binavex/bit/mask_lowest_n_u32.h>
+#include <binavex/bit/parity_strip_check_u32.h>
+#include <binavex/bit/parity_u64.h>
+#include <binavex/bit/popcount_u64.h>
+#include <binavex/bit/rotate_left_u64.h>
+#include <binavex/bit/secded_parity_u32.h>
+#include <binavex/bit/swap_bitpairs_u32.h>
+#include <binavex/bit/swap_bytes16_u32.h>
+#include <binavex/bit/swap_nibbles_u32.h>
+#include <binavex/bit/xorshift32.h>
 
 #include "esp_cpu.h"
 #include "esp_private/esp_clk.h"
@@ -69,94 +69,94 @@ typedef uint64_t (*bench_fn_t)(void);
 static bench_fn_t volatile active_bench;
 static volatile uint64_t bench_sink;
 
-static uint64_t bench_byte_reverse(void) { return pc_bit_byte_reverse_u32(input32); }
-static uint64_t bench_deinterleave4(void) { return pc_bit_deinterleave4_u32(input32); }
+static uint64_t bench_byte_reverse(void) { return binavex_bit_byte_reverse_u32(input32); }
+static uint64_t bench_deinterleave4(void) { return binavex_bit_deinterleave4_u32(input32); }
 static uint64_t bench_error_syndrome(void)
 {
     uint8_t syndrome = 0u;
-    return pc_bit_error_syndrome_u32(input32, input_check, &syndrome) ? syndrome : UINT64_MAX;
+    return binavex_bit_error_syndrome_u32(input32, input_check, &syndrome) ? syndrome : UINT64_MAX;
 }
 static uint64_t bench_extract(void)
 {
     uint64_t field = 0u;
-    return pc_bit_extract_u64(input64, input_first, input_last, &field) ? field : UINT64_MAX;
+    return binavex_bit_extract_u64(input64, input_first, input_last, &field) ? field : UINT64_MAX;
 }
-static uint64_t bench_gather(void) { return pc_bit_gather_u32(input32, input_mask); }
-static uint64_t bench_interleave4(void) { return pc_bit_interleave4_u32(input32); }
-static uint64_t bench_nibble_reverse(void) { return pc_bit_nibble_reverse_u32(input32); }
-static uint64_t bench_pair_reverse(void) { return pc_bit_pair_reverse_u32(input32); }
-static uint64_t bench_reverse64(void) { return pc_bit_reverse_u64(input64); }
-static uint64_t bench_scatter(void) { return pc_bit_scatter_u32(input32, input_mask); }
-static uint64_t bench_shuffle(void) { return pc_bit_shuffle_even_odd_u32(input32); }
+static uint64_t bench_gather(void) { return binavex_bit_gather_u32(input32, input_mask); }
+static uint64_t bench_interleave4(void) { return binavex_bit_interleave4_u32(input32); }
+static uint64_t bench_nibble_reverse(void) { return binavex_bit_nibble_reverse_u32(input32); }
+static uint64_t bench_pair_reverse(void) { return binavex_bit_pair_reverse_u32(input32); }
+static uint64_t bench_reverse64(void) { return binavex_bit_reverse_u64(input64); }
+static uint64_t bench_scatter(void) { return binavex_bit_scatter_u32(input32, input_mask); }
+static uint64_t bench_shuffle(void) { return binavex_bit_shuffle_even_odd_u32(input32); }
 static uint64_t bench_swap(void)
 {
     uint32_t result = 0u;
-    return pc_bit_swap_u32(input32, input_first, input_last, &result) ? result : UINT64_MAX;
+    return binavex_bit_swap_u32(input32, input_first, input_last, &result) ? result : UINT64_MAX;
 }
-static uint64_t bench_unshuffle(void) { return pc_bit_unshuffle_even_odd_u32(input32); }
-static uint64_t bench_count32(void) { return pc_bitset_count_ones_u32(input32); }
-static uint64_t bench_rotate32(void) { return pc_bitset_rotate_left_u32(input32, input_count); }
-static uint64_t bench_clz(void) { return pc_clz_u64(input64); }
-static uint64_t bench_ctz(void) { return pc_ctz_u64(input64); }
-static uint64_t bench_deinterleave_nibbles(void) { return pc_deinterleave_nibbles_u32(input32); }
+static uint64_t bench_unshuffle(void) { return binavex_bit_unshuffle_even_odd_u32(input32); }
+static uint64_t bench_count32(void) { return binavex_bitset_count_ones_u32(input32); }
+static uint64_t bench_rotate32(void) { return binavex_bitset_rotate_left_u32(input32, input_count); }
+static uint64_t bench_clz(void) { return binavex_clz_u64(input64); }
+static uint64_t bench_ctz(void) { return binavex_ctz_u64(input64); }
+static uint64_t bench_deinterleave_nibbles(void) { return binavex_deinterleave_nibbles_u32(input32); }
 static uint64_t bench_even_parity(void)
 {
     uint32_t word = 0u;
-    return pc_even_parity_insert_u32(input32, &word) ? word : UINT64_MAX;
+    return binavex_even_parity_insert_u32(input32, &word) ? word : UINT64_MAX;
 }
-static uint64_t bench_gray_decode(void) { return pc_gray_decode_u64(input64); }
-static uint64_t bench_gray_encode(void) { return pc_gray_encode_u64(input64); }
-static uint64_t bench_interleave_bytes(void) { return pc_interleave_bytes_u32(input32); }
-static uint64_t bench_interleave_nibbles(void) { return pc_interleave_nibbles_u32(input32); }
+static uint64_t bench_gray_decode(void) { return binavex_gray_decode_u64(input64); }
+static uint64_t bench_gray_encode(void) { return binavex_gray_encode_u64(input64); }
+static uint64_t bench_interleave_bytes(void) { return binavex_interleave_bytes_u32(input32); }
+static uint64_t bench_interleave_nibbles(void) { return binavex_interleave_nibbles_u32(input32); }
 static uint64_t bench_mask_between(void)
 {
     uint32_t mask = 0u;
-    return pc_mask_between_u32(input_first, input_last, &mask) ? mask : UINT64_MAX;
+    return binavex_mask_between_u32(input_first, input_last, &mask) ? mask : UINT64_MAX;
 }
-static uint64_t bench_count_runs(void) { return pc_mask_count_runs_u32(input_mask); }
-static uint64_t bench_is_contiguous(void) { return pc_mask_is_contiguous_u32(input_mask); }
+static uint64_t bench_count_runs(void) { return binavex_mask_count_runs_u32(input_mask); }
+static uint64_t bench_is_contiguous(void) { return binavex_mask_is_contiguous_u32(input_mask); }
 static uint64_t bench_mask_low64(void)
 {
     uint64_t mask = 0u;
-    return pc_mask_low_u64(input_width, &mask) ? mask : UINT64_MAX;
+    return binavex_mask_low_u64(input_width, &mask) ? mask : UINT64_MAX;
 }
 static uint64_t bench_mask_low32(void)
 {
     uint32_t mask = 0u;
-    return pc_mask_lowest_n_u32(input_width, &mask) ? mask : UINT64_MAX;
+    return binavex_mask_lowest_n_u32(input_width, &mask) ? mask : UINT64_MAX;
 }
 static uint64_t bench_parity_strip(void)
 {
     uint32_t payload = 0u;
-    return pc_parity_strip_check_u32(input_word, &payload) ? payload : UINT64_MAX;
+    return binavex_parity_strip_check_u32(input_word, &payload) ? payload : UINT64_MAX;
 }
-static uint64_t bench_parity64(void) { return pc_parity_u64(input64); }
-static uint64_t bench_popcount64(void) { return pc_popcount_u64(input64); }
-static uint64_t bench_rotate64(void) { return pc_rotate_left_u64(input64, input_count); }
+static uint64_t bench_parity64(void) { return binavex_parity_u64(input64); }
+static uint64_t bench_popcount64(void) { return binavex_popcount_u64(input64); }
+static uint64_t bench_rotate64(void) { return binavex_rotate_left_u64(input64, input_count); }
 static uint64_t bench_secded_parity(void)
 {
     uint8_t checks = 0u;
-    return pc_secded_parity_u32(input32, &checks) ? checks : UINT64_MAX;
+    return binavex_secded_parity_u32(input32, &checks) ? checks : UINT64_MAX;
 }
-static uint64_t bench_swap_bitpairs(void) { return pc_swap_bitpairs_u32(input32); }
-static uint64_t bench_swap_bytes16(void) { return pc_swap_bytes16_u32(input32); }
-static uint64_t bench_swap_nibbles(void) { return pc_swap_nibbles_u32(input32); }
-static uint64_t bench_xorshift(void) { return pc_xorshift32(input32); }
+static uint64_t bench_swap_bitpairs(void) { return binavex_swap_bitpairs_u32(input32); }
+static uint64_t bench_swap_bytes16(void) { return binavex_swap_bytes16_u32(input32); }
+static uint64_t bench_swap_nibbles(void) { return binavex_swap_nibbles_u32(input32); }
+static uint64_t bench_xorshift(void) { return binavex_xorshift32(input32); }
 static uint64_t bench_noop(void) { return input64 ^ (uint64_t)input32; }
 
 static const char * const api_names[API_COUNT] = {
-    "pc_bit_byte_reverse_u32", "pc_bit_deinterleave4_u32", "pc_bit_error_syndrome_u32",
-    "pc_bit_extract_u64", "pc_bit_gather_u32", "pc_bit_interleave4_u32",
-    "pc_bit_nibble_reverse_u32", "pc_bit_pair_reverse_u32", "pc_bit_reverse_u64",
-    "pc_bit_scatter_u32", "pc_bit_shuffle_even_odd_u32", "pc_bit_swap_u32",
-    "pc_bit_unshuffle_even_odd_u32", "pc_bitset_count_ones_u32", "pc_bitset_rotate_left_u32",
-    "pc_clz_u64", "pc_ctz_u64", "pc_deinterleave_nibbles_u32", "pc_even_parity_insert_u32",
-    "pc_gray_decode_u64", "pc_gray_encode_u64", "pc_interleave_bytes_u32",
-    "pc_interleave_nibbles_u32", "pc_mask_between_u32", "pc_mask_count_runs_u32",
-    "pc_mask_is_contiguous_u32", "pc_mask_low_u64", "pc_mask_lowest_n_u32",
-    "pc_parity_strip_check_u32", "pc_parity_u64", "pc_popcount_u64", "pc_rotate_left_u64",
-    "pc_secded_parity_u32", "pc_swap_bitpairs_u32", "pc_swap_bytes16_u32",
-    "pc_swap_nibbles_u32", "pc_xorshift32"
+    "binavex_bit_byte_reverse_u32", "binavex_bit_deinterleave4_u32", "binavex_bit_error_syndrome_u32",
+    "binavex_bit_extract_u64", "binavex_bit_gather_u32", "binavex_bit_interleave4_u32",
+    "binavex_bit_nibble_reverse_u32", "binavex_bit_pair_reverse_u32", "binavex_bit_reverse_u64",
+    "binavex_bit_scatter_u32", "binavex_bit_shuffle_even_odd_u32", "binavex_bit_swap_u32",
+    "binavex_bit_unshuffle_even_odd_u32", "binavex_bitset_count_ones_u32", "binavex_bitset_rotate_left_u32",
+    "binavex_clz_u64", "binavex_ctz_u64", "binavex_deinterleave_nibbles_u32", "binavex_even_parity_insert_u32",
+    "binavex_gray_decode_u64", "binavex_gray_encode_u64", "binavex_interleave_bytes_u32",
+    "binavex_interleave_nibbles_u32", "binavex_mask_between_u32", "binavex_mask_count_runs_u32",
+    "binavex_mask_is_contiguous_u32", "binavex_mask_low_u64", "binavex_mask_lowest_n_u32",
+    "binavex_parity_strip_check_u32", "binavex_parity_u64", "binavex_popcount_u64", "binavex_rotate_left_u64",
+    "binavex_secded_parity_u32", "binavex_swap_bitpairs_u32", "binavex_swap_bytes16_u32",
+    "binavex_swap_nibbles_u32", "binavex_xorshift32"
 };
 
 static bench_fn_t const bench_functions[API_COUNT] = {
@@ -185,7 +185,7 @@ static void set_benchmark_inputs(unsigned int api_index, bool boundary)
     switch (api_index) {
     case 2u:
         input32 = boundary ? UINT32_MAX : UINT32_C(0xA55A1234);
-        (void)pc_secded_parity_u32(input32, &input_check);
+        (void)binavex_secded_parity_u32(input32, &input_check);
         break;
     case 3u:
         input_first = boundary ? 0u : 9u;
@@ -213,7 +213,7 @@ static void set_benchmark_inputs(unsigned int api_index, bool boundary)
         input_width = boundary ? 32u : 23u;
         break;
     case 28u:
-        if (!boundary) (void)pc_even_parity_insert_u32(UINT32_C(0x25C369F0), &input_word);
+        if (!boundary) (void)binavex_even_parity_insert_u32(UINT32_C(0x25C369F0), &input_word);
         break;
     case 15u:
     case 16u:

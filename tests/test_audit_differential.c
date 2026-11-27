@@ -2,43 +2,43 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #endif
-#include "pc_bit_byte_reverse_u32.h"
-#include "pc_bit_deinterleave4_u32.h"
-#include "pc_bit_error_syndrome_u32.h"
-#include "pc_bit_extract_u64.h"
-#include "pc_bit_gather_u32.h"
-#include "pc_bit_interleave4_u32.h"
-#include "pc_bit_nibble_reverse_u32.h"
-#include "pc_bit_pair_reverse_u32.h"
-#include "pc_bit_reverse_u64.h"
-#include "pc_bit_scatter_u32.h"
-#include "pc_bit_shuffle_even_odd_u32.h"
-#include "pc_bit_swap_u32.h"
-#include "pc_bit_unshuffle_even_odd_u32.h"
-#include "pc_bitset_count_ones_u32.h"
-#include "pc_bitset_rotate_left_u32.h"
-#include "pc_clz_u64.h"
-#include "pc_ctz_u64.h"
-#include "pc_deinterleave_nibbles_u32.h"
-#include "pc_even_parity_insert_u32.h"
-#include "pc_gray_decode_u64.h"
-#include "pc_gray_encode_u64.h"
-#include "pc_interleave_bytes_u32.h"
-#include "pc_interleave_nibbles_u32.h"
-#include "pc_mask_between_u32.h"
-#include "pc_mask_count_runs_u32.h"
-#include "pc_mask_is_contiguous_u32.h"
-#include "pc_mask_low_u64.h"
-#include "pc_mask_lowest_n_u32.h"
-#include "pc_parity_strip_check_u32.h"
-#include "pc_parity_u64.h"
-#include "pc_popcount_u64.h"
-#include "pc_rotate_left_u64.h"
-#include "pc_secded_parity_u32.h"
-#include "pc_swap_bitpairs_u32.h"
-#include "pc_swap_bytes16_u32.h"
-#include "pc_swap_nibbles_u32.h"
-#include "pc_xorshift32.h"
+#include <binavex/bit/bit_byte_reverse_u32.h>
+#include <binavex/bit/bit_deinterleave4_u32.h>
+#include <binavex/bit/bit_error_syndrome_u32.h>
+#include <binavex/bit/bit_extract_u64.h>
+#include <binavex/bit/bit_gather_u32.h>
+#include <binavex/bit/bit_interleave4_u32.h>
+#include <binavex/bit/bit_nibble_reverse_u32.h>
+#include <binavex/bit/bit_pair_reverse_u32.h>
+#include <binavex/bit/bit_reverse_u64.h>
+#include <binavex/bit/bit_scatter_u32.h>
+#include <binavex/bit/bit_shuffle_even_odd_u32.h>
+#include <binavex/bit/bit_swap_u32.h>
+#include <binavex/bit/bit_unshuffle_even_odd_u32.h>
+#include <binavex/bit/bitset_count_ones_u32.h>
+#include <binavex/bit/bitset_rotate_left_u32.h>
+#include <binavex/bit/clz_u64.h>
+#include <binavex/bit/ctz_u64.h>
+#include <binavex/bit/deinterleave_nibbles_u32.h>
+#include <binavex/bit/even_parity_insert_u32.h>
+#include <binavex/bit/gray_decode_u64.h>
+#include <binavex/bit/gray_encode_u64.h>
+#include <binavex/bit/interleave_bytes_u32.h>
+#include <binavex/bit/interleave_nibbles_u32.h>
+#include <binavex/bit/mask_between_u32.h>
+#include <binavex/bit/mask_count_runs_u32.h>
+#include <binavex/bit/mask_is_contiguous_u32.h>
+#include <binavex/bit/mask_low_u64.h>
+#include <binavex/bit/mask_lowest_n_u32.h>
+#include <binavex/bit/parity_strip_check_u32.h>
+#include <binavex/bit/parity_u64.h>
+#include <binavex/bit/popcount_u64.h>
+#include <binavex/bit/rotate_left_u64.h>
+#include <binavex/bit/secded_parity_u32.h>
+#include <binavex/bit/swap_bitpairs_u32.h>
+#include <binavex/bit/swap_bytes16_u32.h>
+#include <binavex/bit/swap_nibbles_u32.h>
+#include <binavex/bit/xorshift32.h>
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -50,18 +50,18 @@ static unsigned int audit_first_failed_api_index;
 static unsigned int audit_api_index_from_expression(const char *expression)
 {
     static const char * const api_names[] = {
-        "pc_bit_byte_reverse_u32", "pc_bit_deinterleave4_u32",
-        "pc_bit_error_syndrome_u32", "pc_bit_extract_u64", "pc_bit_gather_u32",
-        "pc_bit_interleave4_u32", "pc_bit_nibble_reverse_u32", "pc_bit_pair_reverse_u32",
-        "pc_bit_reverse_u64", "pc_bit_scatter_u32", "pc_bit_shuffle_even_odd_u32",
-        "pc_bit_swap_u32", "pc_bit_unshuffle_even_odd_u32", "pc_bitset_count_ones_u32",
-        "pc_bitset_rotate_left_u32", "pc_clz_u64", "pc_ctz_u64",
-        "pc_deinterleave_nibbles_u32", "pc_even_parity_insert_u32", "pc_gray_decode_u64",
-        "pc_gray_encode_u64", "pc_interleave_bytes_u32", "pc_interleave_nibbles_u32",
-        "pc_mask_between_u32", "pc_mask_count_runs_u32", "pc_mask_is_contiguous_u32",
-        "pc_mask_low_u64", "pc_mask_lowest_n_u32", "pc_parity_strip_check_u32",
-        "pc_parity_u64", "pc_popcount_u64", "pc_rotate_left_u64", "pc_secded_parity_u32",
-        "pc_swap_bitpairs_u32", "pc_swap_bytes16_u32", "pc_swap_nibbles_u32", "pc_xorshift32"
+        "binavex_bit_byte_reverse_u32", "binavex_bit_deinterleave4_u32",
+        "binavex_bit_error_syndrome_u32", "binavex_bit_extract_u64", "binavex_bit_gather_u32",
+        "binavex_bit_interleave4_u32", "binavex_bit_nibble_reverse_u32", "binavex_bit_pair_reverse_u32",
+        "binavex_bit_reverse_u64", "binavex_bit_scatter_u32", "binavex_bit_shuffle_even_odd_u32",
+        "binavex_bit_swap_u32", "binavex_bit_unshuffle_even_odd_u32", "binavex_bitset_count_ones_u32",
+        "binavex_bitset_rotate_left_u32", "binavex_clz_u64", "binavex_ctz_u64",
+        "binavex_deinterleave_nibbles_u32", "binavex_even_parity_insert_u32", "binavex_gray_decode_u64",
+        "binavex_gray_encode_u64", "binavex_interleave_bytes_u32", "binavex_interleave_nibbles_u32",
+        "binavex_mask_between_u32", "binavex_mask_count_runs_u32", "binavex_mask_is_contiguous_u32",
+        "binavex_mask_low_u64", "binavex_mask_lowest_n_u32", "binavex_parity_strip_check_u32",
+        "binavex_parity_u64", "binavex_popcount_u64", "binavex_rotate_left_u64", "binavex_secded_parity_u32",
+        "binavex_swap_bitpairs_u32", "binavex_swap_bytes16_u32", "binavex_swap_nibbles_u32", "binavex_xorshift32"
     };
     const char *first_match = NULL;
     unsigned int first_index = 0u;
@@ -366,10 +366,10 @@ int main(void)
     /* Exhaust every 32-bit single-bit position for reversible fixed-width maps. */
     for (i = 0u; i < 32u; ++i) {
         const uint32_t bit = UINT32_C(1) << i;
-        CHECK(pc_bit_byte_reverse_u32(bit) == ref_byte_reverse(bit));
-        CHECK(pc_bit_gather_u32(bit, UINT32_MAX) == bit);
-        CHECK(pc_bit_scatter_u32(bit, UINT32_MAX) == bit);
-        { uint32_t swapped=0u; CHECK(pc_bit_swap_u32(bit,(uint8_t)i,(uint8_t)(31u-i),&swapped)); CHECK(swapped==(((bit>>i)&1u)==((bit>>(31u-i))&1u)?bit:(bit^(UINT32_C(1)<<i)^(UINT32_C(1)<<(31u-i))))); }
+        CHECK(binavex_bit_byte_reverse_u32(bit) == ref_byte_reverse(bit));
+        CHECK(binavex_bit_gather_u32(bit, UINT32_MAX) == bit);
+        CHECK(binavex_bit_scatter_u32(bit, UINT32_MAX) == bit);
+        { uint32_t swapped=0u; CHECK(binavex_bit_swap_u32(bit,(uint8_t)i,(uint8_t)(31u-i),&swapped)); CHECK(swapped==(((bit>>i)&1u)==((bit>>(31u-i))&1u)?bit:(bit^(UINT32_C(1)<<i)^(UINT32_C(1)<<(31u-i))))); }
     }
 
     for (i = 0u; i < 6u; ++i) {
@@ -377,29 +377,29 @@ int main(void)
         const uint64_t y = u64_edges[i];
         uint32_t out32 = UINT32_C(0xA5A5A5A5);
         uint64_t out64 = UINT64_C(0xA5A5A5A5A5A5A5A5);
-        CHECK(pc_bit_gather_u32(x, UINT32_MAX) == x);
-        CHECK(pc_bit_scatter_u32(x, UINT32_MAX) == x);
-        CHECK(pc_bit_gather_u32(pc_bit_scatter_u32(x, x), x) == (x & ((x == UINT32_MAX) ? UINT32_MAX : ((UINT32_C(1) << ref_pop32(x))-1u))));
-        CHECK(pc_bit_reverse_u64(y) == ref_reverse64(y));
-        CHECK(pc_bit_reverse_u64(pc_bit_reverse_u64(y)) == y);
-        CHECK(pc_gray_decode_u64(pc_gray_encode_u64(y)) == y);
-        CHECK(pc_popcount_u64(y) == ref_pop64(y));
-        CHECK(pc_parity_u64(y) == (ref_pop64(y) & 1u));
-        CHECK(pc_clz_u64(y) == ref_clz64(y));
-        CHECK(pc_ctz_u64(y) == ref_ctz64(y));
-        CHECK(pc_rotate_left_u64(y, 0u) == y);
-        CHECK(pc_rotate_left_u64(y, 64u) == y);
-        CHECK(pc_bit_extract_u64(y, 0u, 63u, &out64) && out64 == y);
-        CHECK(pc_mask_low_u64(64u, &out64) && out64 == UINT64_MAX);
-        CHECK(pc_mask_lowest_n_u32(32u, &out32) && out32 == UINT32_MAX);
+        CHECK(binavex_bit_gather_u32(x, UINT32_MAX) == x);
+        CHECK(binavex_bit_scatter_u32(x, UINT32_MAX) == x);
+        CHECK(binavex_bit_gather_u32(binavex_bit_scatter_u32(x, x), x) == (x & ((x == UINT32_MAX) ? UINT32_MAX : ((UINT32_C(1) << ref_pop32(x))-1u))));
+        CHECK(binavex_bit_reverse_u64(y) == ref_reverse64(y));
+        CHECK(binavex_bit_reverse_u64(binavex_bit_reverse_u64(y)) == y);
+        CHECK(binavex_gray_decode_u64(binavex_gray_encode_u64(y)) == y);
+        CHECK(binavex_popcount_u64(y) == ref_pop64(y));
+        CHECK(binavex_parity_u64(y) == (ref_pop64(y) & 1u));
+        CHECK(binavex_clz_u64(y) == ref_clz64(y));
+        CHECK(binavex_ctz_u64(y) == ref_ctz64(y));
+        CHECK(binavex_rotate_left_u64(y, 0u) == y);
+        CHECK(binavex_rotate_left_u64(y, 64u) == y);
+        CHECK(binavex_bit_extract_u64(y, 0u, 63u, &out64) && out64 == y);
+        CHECK(binavex_mask_low_u64(64u, &out64) && out64 == UINT64_MAX);
+        CHECK(binavex_mask_lowest_n_u32(32u, &out32) && out32 == UINT32_MAX);
     }
     {
         static const uint32_t counts[] = { 0u, 1u, 31u, 32u, 63u, 64u, UINT32_MAX };
         for(i=0u;i<sizeof(counts)/sizeof(counts[0]);++i){
             const uint64_t value=UINT64_C(0x8123456789ABCDEF);
             const uint32_t value32=UINT32_C(0x81234567);
-            CHECK(pc_rotate_left_u64(value,counts[i])==ref_rotate64(value,counts[i]));
-            CHECK(pc_bitset_rotate_left_u32(value32,counts[i])==ref_rotate32(value32,counts[i]));
+            CHECK(binavex_rotate_left_u64(value,counts[i])==ref_rotate64(value,counts[i]));
+            CHECK(binavex_bitset_rotate_left_u32(value32,counts[i])==ref_rotate32(value32,counts[i]));
         }
     }
 
@@ -407,58 +407,58 @@ int main(void)
     for (i = 0u; i <= 64u; ++i) {
         uint64_t got = UINT64_MAX;
         const uint64_t expected = i == 64u ? UINT64_MAX : (i == 0u ? 0u : (UINT64_MAX >> (64u-i)));
-        CHECK(pc_mask_low_u64((uint8_t)i, &got) && got == expected);
+        CHECK(binavex_mask_low_u64((uint8_t)i, &got) && got == expected);
     }
     for (i = 0u; i <= 32u; ++i) {
         uint32_t got = UINT32_MAX;
         const uint32_t expected = i == 32u ? UINT32_MAX : (i == 0u ? 0u : (UINT32_MAX >> (32u-i)));
-        CHECK(pc_mask_lowest_n_u32((uint8_t)i, &got) && got == expected);
+        CHECK(binavex_mask_lowest_n_u32((uint8_t)i, &got) && got == expected);
     }
     for (i = 0u; i < 64u; ++i) for (j = i; j < 64u; ++j) {
         uint64_t got = UINT64_MAX;
         const unsigned width = j-i+1u;
         const uint64_t mask = width == 64u ? UINT64_MAX : ((UINT64_C(1) << width)-1u);
         const uint64_t value = UINT64_C(0xD3A57C9E102468BF);
-        CHECK(pc_bit_extract_u64(value, (uint8_t)i, (uint8_t)j, &got));
+        CHECK(binavex_bit_extract_u64(value, (uint8_t)i, (uint8_t)j, &got));
         CHECK(got == ((value >> i) & mask));
     }
     {
         uint64_t out = UINT64_C(0x123456789ABCDEF0);
-        CHECK(!pc_bit_extract_u64(0u, 1u, 0u, &out) && out == UINT64_C(0x123456789ABCDEF0));
-        CHECK(!pc_bit_extract_u64(0u, 0u, 64u, &out) && out == UINT64_C(0x123456789ABCDEF0));
-        CHECK(!pc_bit_extract_u64(0u, 255u, 255u, &out) && out == UINT64_C(0x123456789ABCDEF0));
-        CHECK(!pc_bit_extract_u64(0u, 0u, 0u, NULL));
-        CHECK(!pc_mask_low_u64(65u, &out) && out == UINT64_C(0x123456789ABCDEF0));
-        CHECK(!pc_mask_low_u64(1u, NULL));
+        CHECK(!binavex_bit_extract_u64(0u, 1u, 0u, &out) && out == UINT64_C(0x123456789ABCDEF0));
+        CHECK(!binavex_bit_extract_u64(0u, 0u, 64u, &out) && out == UINT64_C(0x123456789ABCDEF0));
+        CHECK(!binavex_bit_extract_u64(0u, 255u, 255u, &out) && out == UINT64_C(0x123456789ABCDEF0));
+        CHECK(!binavex_bit_extract_u64(0u, 0u, 0u, NULL));
+        CHECK(!binavex_mask_low_u64(65u, &out) && out == UINT64_C(0x123456789ABCDEF0));
+        CHECK(!binavex_mask_low_u64(1u, NULL));
     }
     for (i = 0u; i < 32u; ++i) for (j = i; j < 32u; ++j) {
         uint32_t got = 0u;
         const uint32_t mask = j-i == 31u ? UINT32_MAX : ((UINT32_C(1) << (j-i+1u))-1u) << i;
-        CHECK(pc_mask_between_u32((uint8_t)i,(uint8_t)j,&got) && got == mask);
+        CHECK(binavex_mask_between_u32((uint8_t)i,(uint8_t)j,&got) && got == mask);
     }
     {
         uint32_t out = UINT32_C(0xA5A5A5A5);
-        CHECK(!pc_mask_between_u32(2u,1u,&out) && out == UINT32_C(0xA5A5A5A5));
-        CHECK(!pc_mask_between_u32(0u,32u,&out) && out == UINT32_C(0xA5A5A5A5));
-        CHECK(!pc_mask_between_u32(0u,255u,&out) && out == UINT32_C(0xA5A5A5A5));
-        CHECK(!pc_mask_between_u32(0u,0u,NULL));
-        CHECK(!pc_mask_lowest_n_u32(33u,&out) && out == UINT32_C(0xA5A5A5A5));
-        CHECK(!pc_mask_lowest_n_u32(1u,NULL));
+        CHECK(!binavex_mask_between_u32(2u,1u,&out) && out == UINT32_C(0xA5A5A5A5));
+        CHECK(!binavex_mask_between_u32(0u,32u,&out) && out == UINT32_C(0xA5A5A5A5));
+        CHECK(!binavex_mask_between_u32(0u,255u,&out) && out == UINT32_C(0xA5A5A5A5));
+        CHECK(!binavex_mask_between_u32(0u,0u,NULL));
+        CHECK(!binavex_mask_lowest_n_u32(33u,&out) && out == UINT32_C(0xA5A5A5A5));
+        CHECK(!binavex_mask_lowest_n_u32(1u,NULL));
     }
     {
         uint32_t out = UINT32_C(0xA5A5A5A5);
-        CHECK(pc_bit_swap_u32(UINT32_C(0x80000000),0u,31u,&out) && out == UINT32_C(0x00000001));
-        CHECK(!pc_bit_swap_u32(0u,32u,0u,&out) && out == UINT32_C(0x00000001));
-        CHECK(!pc_bit_swap_u32(0u,0u,255u,&out) && out == UINT32_C(0x00000001));
-        CHECK(!pc_bit_swap_u32(0u,0u,0u,NULL));
+        CHECK(binavex_bit_swap_u32(UINT32_C(0x80000000),0u,31u,&out) && out == UINT32_C(0x00000001));
+        CHECK(!binavex_bit_swap_u32(0u,32u,0u,&out) && out == UINT32_C(0x00000001));
+        CHECK(!binavex_bit_swap_u32(0u,0u,255u,&out) && out == UINT32_C(0x00000001));
+        CHECK(!binavex_bit_swap_u32(0u,0u,0u,NULL));
     }
 
     /* Exhaustive nibble and byte lane models. */
-    for (i = 0u; i < 256u; ++i) CHECK(pc_bit_byte_reverse_u32((uint32_t)i)==ref_byte_reverse((uint32_t)i));
+    for (i = 0u; i < 256u; ++i) CHECK(binavex_bit_byte_reverse_u32((uint32_t)i)==ref_byte_reverse((uint32_t)i));
     for (i = 0u; i < 65536u; ++i) {
         const uint32_t x = (uint32_t)i | ((uint32_t)(i ^ 0xFFFFu) << 16u);
-        CHECK(pc_bit_interleave4_u32(x) == ref_interleave4(x));
-        CHECK(pc_bit_deinterleave4_u32(pc_bit_interleave4_u32(x)) == x);
+        CHECK(binavex_bit_interleave4_u32(x) == ref_interleave4(x));
+        CHECK(binavex_bit_deinterleave4_u32(binavex_bit_interleave4_u32(x)) == x);
     }
 
     for (i = 0u; i < 100000u; ++i) {
@@ -469,53 +469,53 @@ int main(void)
         const unsigned first = (unsigned)(b % 64u);
         const unsigned last = first + (unsigned)((b >> 8u) % (64u-first));
 
-        CHECK(pc_bit_extract_u64(a,(uint8_t)first,(uint8_t)last,&got64));
+        CHECK(binavex_bit_extract_u64(a,(uint8_t)first,(uint8_t)last,&got64));
         { const unsigned w=last-first+1u; const uint64_t m=w==64u?UINT64_MAX:((UINT64_C(1)<<w)-1u); CHECK(got64==((a>>first)&m)); }
-        CHECK(pc_bit_reverse_u64(a)==ref_reverse64(a));
-        CHECK(pc_gray_encode_u64(a)==(a^(a>>1u)));
-        CHECK(pc_gray_decode_u64(pc_gray_encode_u64(a))==a);
-        CHECK(pc_popcount_u64(a)==ref_pop64(a));
-        CHECK(pc_parity_u64(a)==(ref_pop64(a)&1u));
-        CHECK(pc_clz_u64(a)==ref_clz64(a));
-        CHECK(pc_ctz_u64(a)==ref_ctz64(a));
-        CHECK(pc_rotate_left_u64(a,(uint32_t)b)==ref_rotate64(a,(uint32_t)b));
-        CHECK(pc_mask_low_u64((uint8_t)(b%65u),&got64));
+        CHECK(binavex_bit_reverse_u64(a)==ref_reverse64(a));
+        CHECK(binavex_gray_encode_u64(a)==(a^(a>>1u)));
+        CHECK(binavex_gray_decode_u64(binavex_gray_encode_u64(a))==a);
+        CHECK(binavex_popcount_u64(a)==ref_pop64(a));
+        CHECK(binavex_parity_u64(a)==(ref_pop64(a)&1u));
+        CHECK(binavex_clz_u64(a)==ref_clz64(a));
+        CHECK(binavex_ctz_u64(a)==ref_ctz64(a));
+        CHECK(binavex_rotate_left_u64(a,(uint32_t)b)==ref_rotate64(a,(uint32_t)b));
+        CHECK(binavex_mask_low_u64((uint8_t)(b%65u),&got64));
         CHECK(got64==((b%65u)==64u?UINT64_MAX:((b%65u)==0u?0u:(UINT64_MAX>>(64u-(b%65u))))));
 
-        CHECK(pc_bit_byte_reverse_u32(x)==ref_byte_reverse(x));
-        CHECK(pc_bit_gather_u32(x,mask)==ref_gather(x,mask));
-        CHECK(pc_bit_scatter_u32(x,mask)==ref_scatter(x,mask));
-        CHECK(pc_bit_gather_u32(pc_bit_scatter_u32(x,mask),mask)==(x & (ref_pop32(mask)==32u?UINT32_MAX:((UINT32_C(1)<<ref_pop32(mask))-1u))));
-        CHECK(pc_bit_interleave4_u32(x)==ref_interleave4(x));
-        CHECK(pc_bit_deinterleave4_u32(x)==ref_deinterleave4(x));
-        CHECK(pc_bit_deinterleave4_u32(pc_bit_interleave4_u32(x))==x);
-        CHECK(pc_bit_nibble_reverse_u32(x)==ref_nibble_reverse(x));
-        CHECK(pc_bit_pair_reverse_u32(x)==ref_pair_reverse(x));
-        CHECK(pc_bit_reverse_u64(a)==ref_reverse64(a));
-        CHECK(pc_bit_shuffle_even_odd_u32(x)==ref_shuffle(x));
-        CHECK(pc_bit_unshuffle_even_odd_u32(x)==ref_unshuffle(x));
-        CHECK(pc_bit_unshuffle_even_odd_u32(pc_bit_shuffle_even_odd_u32(x))==x);
-        CHECK(pc_bitset_count_ones_u32(x)==ref_pop32(x));
-        CHECK(pc_bitset_rotate_left_u32(x,(uint32_t)b)==ref_rotate32(x,(uint32_t)b));
-        CHECK(pc_deinterleave_nibbles_u32(x)==ref_deinterleave_nibbles(x));
-        CHECK(pc_interleave_nibbles_u32(x)==ref_interleave_nibbles(x));
-        CHECK(pc_interleave_nibbles_u32(pc_deinterleave_nibbles_u32(x))==x);
-        CHECK(pc_interleave_bytes_u32(x)==ref_interleave_bytes(x));
-        CHECK(pc_mask_count_runs_u32(x)==ref_count_runs(x));
-        CHECK(pc_mask_is_contiguous_u32(x)==ref_is_contiguous(x));
-        CHECK(pc_swap_bitpairs_u32(x)==ref_swap_bitpairs(x));
-        CHECK(pc_swap_bytes16_u32(x)==ref_swap_bytes16(x));
-        CHECK(pc_swap_nibbles_u32(x)==ref_swap_nibbles(x));
-        CHECK(pc_xorshift32(x)==ref_xorshift32(x));
-        CHECK(ref_pop64(pc_gray_encode_u64(a+1u)^pc_gray_encode_u64(a))==1u);
+        CHECK(binavex_bit_byte_reverse_u32(x)==ref_byte_reverse(x));
+        CHECK(binavex_bit_gather_u32(x,mask)==ref_gather(x,mask));
+        CHECK(binavex_bit_scatter_u32(x,mask)==ref_scatter(x,mask));
+        CHECK(binavex_bit_gather_u32(binavex_bit_scatter_u32(x,mask),mask)==(x & (ref_pop32(mask)==32u?UINT32_MAX:((UINT32_C(1)<<ref_pop32(mask))-1u))));
+        CHECK(binavex_bit_interleave4_u32(x)==ref_interleave4(x));
+        CHECK(binavex_bit_deinterleave4_u32(x)==ref_deinterleave4(x));
+        CHECK(binavex_bit_deinterleave4_u32(binavex_bit_interleave4_u32(x))==x);
+        CHECK(binavex_bit_nibble_reverse_u32(x)==ref_nibble_reverse(x));
+        CHECK(binavex_bit_pair_reverse_u32(x)==ref_pair_reverse(x));
+        CHECK(binavex_bit_reverse_u64(a)==ref_reverse64(a));
+        CHECK(binavex_bit_shuffle_even_odd_u32(x)==ref_shuffle(x));
+        CHECK(binavex_bit_unshuffle_even_odd_u32(x)==ref_unshuffle(x));
+        CHECK(binavex_bit_unshuffle_even_odd_u32(binavex_bit_shuffle_even_odd_u32(x))==x);
+        CHECK(binavex_bitset_count_ones_u32(x)==ref_pop32(x));
+        CHECK(binavex_bitset_rotate_left_u32(x,(uint32_t)b)==ref_rotate32(x,(uint32_t)b));
+        CHECK(binavex_deinterleave_nibbles_u32(x)==ref_deinterleave_nibbles(x));
+        CHECK(binavex_interleave_nibbles_u32(x)==ref_interleave_nibbles(x));
+        CHECK(binavex_interleave_nibbles_u32(binavex_deinterleave_nibbles_u32(x))==x);
+        CHECK(binavex_interleave_bytes_u32(x)==ref_interleave_bytes(x));
+        CHECK(binavex_mask_count_runs_u32(x)==ref_count_runs(x));
+        CHECK(binavex_mask_is_contiguous_u32(x)==ref_is_contiguous(x));
+        CHECK(binavex_swap_bitpairs_u32(x)==ref_swap_bitpairs(x));
+        CHECK(binavex_swap_bytes16_u32(x)==ref_swap_bytes16(x));
+        CHECK(binavex_swap_nibbles_u32(x)==ref_swap_nibbles(x));
+        CHECK(binavex_xorshift32(x)==ref_xorshift32(x));
+        CHECK(ref_pop64(binavex_gray_encode_u64(a+1u)^binavex_gray_encode_u64(a))==1u);
 
-        CHECK(pc_bit_swap_u32(x,(uint8_t)(b&31u),(uint8_t)((b>>7u)&31u),&got32));
+        CHECK(binavex_bit_swap_u32(x,(uint8_t)(b&31u),(uint8_t)((b>>7u)&31u),&got32));
         { unsigned p=(unsigned)(b&31u),q=(unsigned)((b>>7u)&31u); uint32_t e=x; if(((x>>p)&1u)!=((x>>q)&1u))e^=(UINT32_C(1)<<p)|(UINT32_C(1)<<q); CHECK(got32==e); }
-        CHECK(pc_even_parity_insert_u32(x&UINT32_C(0x7FFFFFFF),&got32));
+        CHECK(binavex_even_parity_insert_u32(x&UINT32_C(0x7FFFFFFF),&got32));
         CHECK((ref_pop32(got32)&1u)==0u && (got32&UINT32_C(0x7FFFFFFF))==(x&UINT32_C(0x7FFFFFFF)));
-        CHECK(pc_parity_strip_check_u32(got32,&got32));
+        CHECK(binavex_parity_strip_check_u32(got32,&got32));
         CHECK(got32==(x&UINT32_C(0x7FFFFFFF)));
-        { uint8_t checks=0u,syndrome=UINT8_C(0xA5); CHECK(pc_secded_parity_u32(x,&checks)); CHECK(checks==ref_secded_checks(x)); CHECK(pc_bit_error_syndrome_u32(x,checks,&syndrome)); CHECK(syndrome==ref_syndrome(x,checks) && syndrome==0u); }
+        { uint8_t checks=0u,syndrome=UINT8_C(0xA5); CHECK(binavex_secded_parity_u32(x,&checks)); CHECK(checks==ref_secded_checks(x)); CHECK(binavex_bit_error_syndrome_u32(x,checks,&syndrome)); CHECK(syndrome==ref_syndrome(x,checks) && syndrome==0u); }
 #if defined(ESP_PLATFORM)
         if ((i & 255u) == 255u) vTaskDelay(1u);
 #endif
@@ -525,17 +525,17 @@ int main(void)
     {
         uint32_t w = UINT32_C(0xA5A5A5A5), p = UINT32_C(0xA5A5A5A5);
         uint8_t s = UINT8_C(0xA5);
-        CHECK(!pc_even_parity_insert_u32(UINT32_C(0x80000000),&w) && w==UINT32_C(0xA5A5A5A5));
-        CHECK(!pc_even_parity_insert_u32(0u,NULL));
-        CHECK(!pc_parity_strip_check_u32(1u,&p) && p==UINT32_C(0xA5A5A5A5));
-        CHECK(!pc_parity_strip_check_u32(0u,NULL));
-        CHECK(!pc_secded_parity_u32(0u,NULL));
-        CHECK(!pc_bit_error_syndrome_u32(0u,UINT8_C(0x80),&s) && s==UINT8_C(0xA5));
-        CHECK(!pc_bit_error_syndrome_u32(0u,0u,NULL));
-        CHECK(!pc_mask_between_u32(31u,32u,&w) && w==UINT32_C(0xA5A5A5A5));
-        CHECK(!pc_bit_swap_u32(0u,255u,0u,&w) && w==UINT32_C(0xA5A5A5A5));
-        CHECK(!pc_bit_swap_u32(0u,0u,0u,NULL));
-        CHECK(pc_bit_error_syndrome_u32(0u,0u,&s) && s==0u);
+        CHECK(!binavex_even_parity_insert_u32(UINT32_C(0x80000000),&w) && w==UINT32_C(0xA5A5A5A5));
+        CHECK(!binavex_even_parity_insert_u32(0u,NULL));
+        CHECK(!binavex_parity_strip_check_u32(1u,&p) && p==UINT32_C(0xA5A5A5A5));
+        CHECK(!binavex_parity_strip_check_u32(0u,NULL));
+        CHECK(!binavex_secded_parity_u32(0u,NULL));
+        CHECK(!binavex_bit_error_syndrome_u32(0u,UINT8_C(0x80),&s) && s==UINT8_C(0xA5));
+        CHECK(!binavex_bit_error_syndrome_u32(0u,0u,NULL));
+        CHECK(!binavex_mask_between_u32(31u,32u,&w) && w==UINT32_C(0xA5A5A5A5));
+        CHECK(!binavex_bit_swap_u32(0u,255u,0u,&w) && w==UINT32_C(0xA5A5A5A5));
+        CHECK(!binavex_bit_swap_u32(0u,0u,0u,NULL));
+        CHECK(binavex_bit_error_syndrome_u32(0u,0u,&s) && s==0u);
     }
 
     /* Exhaust all SECDED bit-error locations and all 741 double-error pairs. */
@@ -548,14 +548,14 @@ int main(void)
             if ((a & (a-1u))==0u && a<=32u) c^=(uint8_t)(1u << (a==1u?0u:a==2u?1u:a==4u?2u:a==8u?3u:a==16u?4u:5u));
             else if(a==39u)c^=UINT8_C(0x40);
             else { unsigned p,bit=0u; for(p=1u;p<=38u;++p)if((p&(p-1u))!=0u){if(p==a)d^=UINT32_C(1)<<bit; ++bit;} }
-            CHECK(pc_bit_error_syndrome_u32(d,c,&syndrome));
+            CHECK(binavex_bit_error_syndrome_u32(d,c,&syndrome));
             CHECK(syndrome==(uint8_t)((a==39u?0u:a)|UINT8_C(0x40)));
             for (b=a+1u;b<=39u;++b) {
                 uint32_t dd=data; uint8_t cc=checks; unsigned p,bit=0u; uint8_t expected;
                 for(p=1u;p<=38u;++p){if((p&(p-1u))==0u){unsigned cb=(p==1u?0u:p==2u?1u:p==4u?2u:p==8u?3u:p==16u?4u:5u);if(p==a||p==b)cc^=(uint8_t)(1u<<cb);}else{if(p==a||p==b)dd^=UINT32_C(1)<<bit;++bit;}}
                 if(a==39u||b==39u)cc^=UINT8_C(0x40);
                 expected=(uint8_t)((a==39u?b:b==39u?a:(a^b)) & 0x3fu);
-                CHECK(pc_bit_error_syndrome_u32(dd,cc,&syndrome) && syndrome==expected);
+                CHECK(binavex_bit_error_syndrome_u32(dd,cc,&syndrome) && syndrome==expected);
             }
         }
     }
@@ -563,9 +563,9 @@ int main(void)
     /* Long fixed-seed state sequence checks the exact xorshift recurrence. */
     {
         uint32_t state=UINT32_C(0x12345678), actual_state=UINT32_C(0x12345678);
-        CHECK(pc_xorshift32(0u)==0u);
-        CHECK(pc_xorshift32(state)==UINT32_C(0x87985AA5));
-        for(i=0u;i<100000u;++i){state=ref_xorshift32(state);actual_state=pc_xorshift32(actual_state);CHECK(actual_state==state);}
+        CHECK(binavex_xorshift32(0u)==0u);
+        CHECK(binavex_xorshift32(state)==UINT32_C(0x87985AA5));
+        for(i=0u;i<100000u;++i){state=ref_xorshift32(state);actual_state=binavex_xorshift32(actual_state);CHECK(actual_state==state);}
     }
 
     puts("Binavex independent audit differential checks passed.");

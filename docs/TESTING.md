@@ -28,7 +28,7 @@ All configurations use C99 and strict warning settings (`-Wall -Wextra -Wpedanti
 
 GitHub Actions run `43026354650` on commit `eece181e4f72e9c6e6f2f200f0abf6837282b24a` completed successfully: 8/8 jobs passed (GCC Debug/Release, Clang Debug/Release, MSVC Debug/Release, ASan, UBSan). [Workflow run](https://github.com/Vanderhell/binavex/actions/runs/43026354650). CI executes native Linux GCC/Clang, MSVC Debug/Release, ASan and UBSan.
 
-### Revalidation of current source
+### Pre-migration source revalidation
 
 On 2026-11-11, the current source and tests (HEAD `3439e6f`; its difference from the CI-tested commit is documentation only) were rebuilt in clean temporary build directories with strict warnings:
 
@@ -42,11 +42,24 @@ On 2026-11-11, the current source and tests (HEAD `3439e6f`; its difference from
 
 The existing remote matrix supplies native Linux Clang and both sanitizer runtimes. Workflow run `43044147090` on commit `a11f6be2d06ba5f4fb7e2d2ed31d24addaf48495` completed successfully: 8/8 jobs passed (GCC Debug/Release, Clang Debug/Release, MSVC Debug/Release, ASan, UBSan). [Final workflow run](https://github.com/Vanderhell/binavex/actions/runs/43044147090).
 
-## ESP32-S3 hardware
+### Namespace-migrated revision (2026-11-27)
 
-**Current hardware PASS: 37/37 public APIs.** On 2026-11-11, the designated ESP32-S3 on COM37 (USB Serial/JTAG, MAC `3c:0f:02:d9:77:30`, revision 0.2) ran the validation firmware built with ESP-IDF 5.5.1, Xtensa GCC 14.2.0, C99 production units, `-O3`, and confirmed 240 MHz CPU. The independent differential suite completed and printed `BINAVEX_ALL37_PASS|passed=37/37|first_failed_api=0`; no watchdog warning occurred during the final run. The suite exercises direct API calls, reference comparisons, boundaries and deterministic generated data. See `docs/PERFORMANCE.md` for per-API representative/boundary cycle medians and memory attribution.
+| Toolchain/check | Result |
+|---|---|
+| MSVC 19.42.34444 Debug / Release | PASS, 28/28 CTest entries each |
+| GCC 16.1.0 (MinGW UCRT) Debug / Release | PASS, 28/28 each |
+| Clang 22.1.8 (Windows GNU target) Debug / Release | PASS, 28/28 each |
+| GCC 13.3.0 ASan / UBSan (Ubuntu 24.04 under WSL) | PASS, 28/28 each |
+| Installed `find_package(Binavex)` consumer | PASS |
+| `add_subdirectory` consumer / selected-source strict C99 consumer | PASS |
+| GitHub Actions for migrated revision | NOT RUN; push failed because the configured HTTPS proxy could not connect |
+| ESP32-S3 for migrated revision | HW NOT VERIFIED |
 
-The user designated this board for testing and authorized replacing its existing test firmware without a backup. Only app0 at offset `0x10000` was written, and esptool verified its digest after writing. NVS, bootloader, partition table, OTA metadata, app1, SPIFFS and coredump were not written. The binary was 211,904 bytes and fits the app0 partition. Physical flash is 16 MB; the image header still reports 4 MB, which ESP-IDF logged as a size mismatch. The test completed despite this warning. No hardware algorithm defect was found.
+## Historical ESP32-S3 hardware evidence (pre-namespace migration)
+
+**Historical hardware PASS: 37/37 public APIs.** On 2026-11-11, an ESP32-S3 (revision 0.2) ran the pre-migration validation firmware built with ESP-IDF 5.5.1, Xtensa GCC 14.2.0, C99 production units, `-O3`, and confirmed 240 MHz CPU. The independent differential suite completed and printed `BINAVEX_ALL37_PASS|passed=37/37|first_failed_api=0`; no watchdog warning occurred during the final run. See `docs/PERFORMANCE.md` for historical per-API cycle medians and memory attribution.
+
+The historical validation image was 211,904 bytes and fit the app0 partition. Physical flash was reported as 16 MB while the image header reported 4 MB; ESP-IDF logged the mismatch. The test completed, and no hardware algorithm defect was found. The namespace-migrated source and firmware have not been run on hardware: `HW NOT VERIFIED`.
 
 ## Reproduce host tests
 
@@ -68,4 +81,4 @@ ctest --test-dir build -C Release --output-on-failure
 
 No production defect was confirmed, so production algorithms were not changed. During test development, two incorrect expected values in the new test were corrected: the bit-swap vector had equal source bits, and the even-parity assertion compared a bit count to zero instead of checking its low bit. These were test-only errors and are fixed in the passing suite.
 
-The full 32-bit input domains are not exhaustively enumerated. SECDED position errors are exhaustive for one representative codeword, while full-width data coverage is deterministic sampling. Single watermark readings are observations, not stack bounds. See `docs/PERFORMANCE.md` for current hardware measurements and configuration.
+The full 32-bit input domains are not exhaustively enumerated. SECDED position errors are exhaustive for one representative codeword, while full-width data coverage is deterministic sampling. Single watermark readings are observations, not stack bounds. See `docs/PERFORMANCE.md` for historical hardware measurements and configuration.

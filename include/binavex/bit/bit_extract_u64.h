@@ -1,0 +1,21 @@
+#ifndef BINAVEX_BIT_BIT_EXTRACT_U64_H
+#define BINAVEX_BIT_BIT_EXTRACT_U64_H
+#include <stdbool.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+
+/* Extract inclusive bit range [first_bit,last_bit], right-aligned in *field.
+ * Reject invalid bounds or null output; failure leaves *field unchanged. */
+bool binavex_bit_extract_u64(uint64_t value, uint8_t first_bit, uint8_t last_bit,
+                        uint64_t *field);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* BINAVEX_BIT_BIT_EXTRACT_U64_H */
